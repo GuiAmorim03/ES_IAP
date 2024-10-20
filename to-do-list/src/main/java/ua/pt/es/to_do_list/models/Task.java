@@ -10,7 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 public class Task {
@@ -29,13 +29,13 @@ public class Task {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @Column(nullable = false)
-    private Date deadline;
+    @Column
+    private LocalDateTime deadline;
 
     @Column(nullable = false)
-    private Date creationDate;
+    private LocalDateTime creationDate;
 
-    @Column(nullable = false)
+    @Column
     private String category;
 
     @Column(nullable = false)
@@ -48,12 +48,12 @@ public class Task {
     public Task() {
     }
 
-    public Task(String title, String description, Status status, Date deadline, String category, Priority priority, Person person) {
+    public Task(String title, String description, LocalDateTime deadline, String category, Priority priority, Person person) {
         this.title = title;
         this.description = description;
-        this.status = status;
+        this.status = Status.PENDING;
         this.deadline = deadline;
-        this.creationDate = new Date();
+        this.creationDate = LocalDateTime.now();
         this.category = category;
         this.priority = priority;
         this.person = person;
@@ -75,11 +75,11 @@ public class Task {
         return status;
     }
 
-    public Date getDeadline() {
+    public LocalDateTime getDeadline() {
         return deadline;
     }
 
-    public Date getCreationDate() {
+    public LocalDateTime getCreationDate() {
         return creationDate;
     }
 
@@ -93,6 +93,10 @@ public class Task {
 
     public Person getUser() {
         return person;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
     @Override

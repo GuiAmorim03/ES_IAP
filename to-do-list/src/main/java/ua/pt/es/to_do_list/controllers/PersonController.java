@@ -2,9 +2,11 @@ package ua.pt.es.to_do_list.controllers;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,21 +22,26 @@ public class PersonController {
     
     private PersonService personService;
 
-    @GetMapping("/id")
+    @Autowired
+    public PersonController(PersonService personService) {
+        this.personService = personService;
+    }
+
+    @GetMapping("/id/{id}")
     @Operation(summary = "Get a person by id", description = "Get a person by id")
-    ResponseEntity<String> getPersonById(Long id) {
+    ResponseEntity<String> getPersonById(@PathVariable("id") Long id) {
         return ResponseEntity.ok().body(personService.getPersonById(id).getName());
     }
 
-    @GetMapping("/name")
+    @GetMapping("/name/{name}")
     @Operation(summary = "Get a list of people by name", description = "Get a list of people by name")
-    ResponseEntity<List<String>> getPersonByName(String name) {
+    ResponseEntity<List<String>> getPersonByName(@PathVariable("name") String name) {
         return ResponseEntity.ok().body(personService.getPersonByName(name));
     }
 
-    @GetMapping("/email")
+    @GetMapping("/email/{email}")
     @Operation(summary = "Get a person by email", description = "Get a person by email")
-    ResponseEntity<String> getPersonByEmail(String email) {
+    ResponseEntity<String> getPersonByEmail(@PathVariable("email") String email) {
         return ResponseEntity.ok().body(personService.getPersonByEmail(email).getName());
     }
 }
