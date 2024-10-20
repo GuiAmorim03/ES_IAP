@@ -1,5 +1,6 @@
 package ua.pt.es.to_do_list.services;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ua.pt.es.to_do_list.models.Person;
@@ -10,6 +11,12 @@ import java.util.List;
 
 @Service
 public class TaskService {
+
+    @Autowired
+    public TaskService(TaskRepository taskRepository, PersonService personService) {
+        this.taskRepository = taskRepository;
+        this.personService = personService;
+    }
 
     private PersonService personService;
     

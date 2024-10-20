@@ -1,8 +1,10 @@
 package ua.pt.es.to_do_list.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,16 +22,21 @@ import java.util.List;
 public class TaskController {
 
     private TaskService taskService;
-    
+
+    @Autowired
+    public TaskController(TaskService taskService) {
+        this.taskService = taskService;
+    }
+
     @GetMapping("/{personId}")
     @Operation(summary = "Get list of tasks by person id", description = "Get list of tasks by person id")
-    ResponseEntity<List<Task>> getTasksByPerson(Long personId) {
+    ResponseEntity<List<Task>> getTasksByPerson(@PathVariable("personId") Long personId) {
         return ResponseEntity.ok(taskService.getTasksByPersonId(personId));
     }
 
     @GetMapping("/{personId}/{taskId}")
     @Operation(summary = "Get a task by id and person id", description = "Get a task by id and person id")
-    ResponseEntity<Task> getTaskByIdAndPerson(Long personId, Long taskId) {
+    ResponseEntity<Task> getTaskByIdAndPerson(@PathVariable("personId") Long personId, Long taskId) {
         return ResponseEntity.ok(taskService.getTaskByIdAndPerson(taskId, personId));
     }
 }
