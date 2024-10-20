@@ -3,6 +3,11 @@ package ua.pt.es.to_do_list.models;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 
@@ -21,6 +26,9 @@ public class Person {
 
     @Column(nullable = false)
     private String password;
+
+    @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Task> tasks;
 
     public Person() {
     }
@@ -50,6 +58,6 @@ public class Person {
     @Override
     public String toString() {
         return name + " (" + email + ") - " + id;
-    }   
-    
+    }
+
 }
