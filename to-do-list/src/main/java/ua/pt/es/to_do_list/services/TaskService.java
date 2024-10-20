@@ -31,5 +31,9 @@ public class TaskService {
         Person person = personService.getPersonById(personId);
         return taskRepository.findByPerson(person);
     }
+
+    public Task createTask(Task task) {
+        return taskRepository.save(task);
+    }
     
 }
