@@ -12,7 +12,8 @@ import java.util.List;
 @Repository
 public interface TaskRepository extends JpaRepository<Task, UUID> {
 
-    public Task findByIdAndPerson(Long id, Person person);
+    public Task findById(Long id);
     public List<Task> findByPerson(Person person);
+    public void deleteById(Long id);
   
 }

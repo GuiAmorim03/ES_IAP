@@ -3,9 +3,11 @@ package ua.pt.es.to_do_list.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import ua.pt.es.to_do_list.dto.TaskToCreate;
+import ua.pt.es.to_do_list.dto.TaskToEdit;
 import ua.pt.es.to_do_list.models.Person;
 import ua.pt.es.to_do_list.models.Task;
 import ua.pt.es.to_do_list.services.PersonService;
@@ -41,10 +44,10 @@ public class TaskController {
         return ResponseEntity.ok(taskService.getTasksByPersonId(personId));
     }
 
-    @GetMapping("/{personId}/{taskId}")
-    @Operation(summary = "Get a task by id and person id", description = "Get a task by id and person id")
-    ResponseEntity<Task> getTaskByIdAndPerson(@PathVariable("personId") Long personId, Long taskId) {
-        return ResponseEntity.ok(taskService.getTaskByIdAndPerson(taskId, personId));
+    @GetMapping("/id/{taskId}")
+    @Operation(summary = "Get a task by id", description = "Get a task by id")
+    ResponseEntity<Task> getTaskById(@PathVariable("taskId") Long taskId) {
+        return ResponseEntity.ok(taskService.getTaskById(taskId));
     }
 
     @PostMapping("")
@@ -54,6 +57,20 @@ public class TaskController {
         Task task = new Task(taskToCreate.getTitle(), taskToCreate.getDescription(), taskToCreate.getDeadline(), taskToCreate.getCategory(), taskToCreate.getPriority(), person);
 
         return ResponseEntity.ok(taskService.createTask(task));
+    }
+
+    @PutMapping("")
+    @Operation(summary = "Update a task", description = "Update a task")
+    public ResponseEntity<Task> updateTask(@RequestBody TaskToEdit taskToEdit) {
+        taskService.updateTask(taskToEdit);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/id/{taskId}")
+    @Operation(summary = "Delete a task", description = "Delete a task")
+    public ResponseEntity<Void> deleteTask(@PathVariable("taskId") Long taskId) {
+        taskService.deleteTask(taskId);
+        return ResponseEntity.ok().build();
     }
 
 }
