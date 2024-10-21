@@ -172,11 +172,34 @@
 }
 
 .modalContent {
-  background-color: black;
-
+  background-color: white;
   border: 5px solid purple;
   padding: 2rem;
   border-radius: 20px;
   max-width: 500px;
   width: 100%;
+}
+
+@media (prefers-color-scheme: dark) {
+  .modalContent {
+    background-color: black;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .addTaskButton {
+    color: white;
+  }
+
+  .addTaskButton:hover {
+    color: purple;
+  }
+}
+
+.eyeButton {
+  color: rgb(0, 102, 255);
+}
+
+.trashButton {
+  color: rgb(255, 0, 64);
 }
