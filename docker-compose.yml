@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: todopostgres
+    restart: always
+    environment:
+      POSTGRES_USER: todouser
+      POSTGRES_PASSWORD: todo123
+      POSTGRES_DB: todo
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
