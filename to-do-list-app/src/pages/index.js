@@ -329,9 +329,9 @@ export default function Home() {
                 <div style={{ display: isEditingTask ? 'block' : 'none' }}>
                   <div style={{ fontSize: 'larger', margin: '20px 0 5px 0' }} >Status</div>
                   <select
-                    name="priority"
-                    value={priority}
-                    onChange={(e) => setPriority(e.target.value)}
+                    name="status"
+                    value={status}
+                    onChange={(e) => setStatus(e.target.value)}
                     disabled={!isAddingTask && !isEditingTask}
                     >
                     <option value="PENDING">Pending</option>
