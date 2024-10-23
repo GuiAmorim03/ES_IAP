@@ -24,6 +24,8 @@ export default function Home() {
   const [priority, setPriority] = useState("LOW");
   const [status, setStatus] = useState("PENDING");
 
+  const [sortConfiguration, setSortConfiguration] = useState({ key: 'id', direction: 'ascending' });
+
   const resetForm = () => {
     setTitle("");
     setDescription("");
@@ -183,6 +185,22 @@ export default function Home() {
     }
   };
 
+  const requestSort = (key) => {
+    let direction = 'ascending';
+    if (sortConfiguration.key === key && sortConfiguration.direction === 'ascending') {
+      direction = 'descending';
+    }
+    setSortConfiguration({ key, direction });
+    const sortedTasks = [...tasks].sort((a, b) => {
+      if (direction === 'ascending') {
+        return a[key] > b[key] ? 1 : -1;
+      } else {
+        return a[key] < b[key] ? 1 : -1;
+      }
+    });
+    setTasks(sortedTasks);
+  }
+
   return (
     <>
       <Head>
@@ -202,12 +220,24 @@ export default function Home() {
           <table className={styles.taskTable}>
             <thead>
               <tr>
-                <th>Title</th>
-                {/* <th>Description</th> */}
-                <th>Category</th>
-                <th>Deadline</th>
-                <th style={{ textAlign: 'center' }}>Priority</th>
-                <th style={{ textAlign: 'center' }}>Status</th>
+                <th onClick={() => requestSort('title')}>
+                  Title {sortConfiguration.key === 'title' && (sortConfiguration.direction === 'ascending' ? '↑' : '↓')}
+                </th>
+                <th onClick={() => requestSort('category')}>
+                  Category {sortConfiguration.key === 'category' && (sortConfiguration.direction === 'ascending' ? '↑' : '↓')}
+                </th>
+                <th onClick={() => requestSort('deadline')}>
+                  Deadline {sortConfiguration.key === 'deadline' && (sortConfiguration.direction === 'ascending' ? '↑' : '↓')}
+                </th>
+                <th onClick={() => requestSort('creationDate')}>
+                  Creation Date {sortConfiguration.key === 'creationDate' && (sortConfiguration.direction === 'ascending' ? '↑' : '↓')}
+                </th>
+                <th style={{ textAlign: 'center' }} onClick={() => requestSort('priority')}>
+                  Priority {sortConfiguration.key === 'priority' && (sortConfiguration.direction === 'ascending' ? '↑' : '↓')}
+                </th>
+                <th style={{ textAlign: 'center' }} onClick={() => requestSort('status')}>
+                  Status {sortConfiguration.key === 'status' && (sortConfiguration.direction === 'ascending' ? '↑' : '↓')}
+                </th>
                 <th></th>
                 <th></th>
               </tr>
@@ -222,6 +252,7 @@ export default function Home() {
                     {task.deadline === null ? 'No deadline' :
                       task.deadline.split('T')[0]}
                   </td>
+                  <td>{task.creationDate.split('T')[0]}</td>
                   <td style={{ textAlign: 'center' }}>
                     <FontAwesomeIcon icon={faCircle} style={{ height: '2rem' }} title={task.priority}
                       {...task.priority === 'LOW' ? { color: 'green' } :
@@ -298,7 +329,7 @@ export default function Home() {
                   onChange={(e) => setTime(e.target.value)}
                   disabled={!isAddingTask && !isEditingTask}
                 />
-                <div style={{ display: isEditingTask ? 'block' : 'none' }}>
+                <div style={{ display: !isAddingTask ? 'block' : 'none' }}>
                   <div style={{ fontSize: 'larger', margin: '20px 0 5px 0' }} >Creation Date</div>
                   <input
                     style={{ width: '40%', fontSize: 'large' }}
@@ -326,7 +357,7 @@ export default function Home() {
                   <option value="MEDIUM">Medium</option>
                   <option value="HIGH">High</option>
                 </select>
-                <div style={{ display: isEditingTask ? 'block' : 'none' }}>
+                <div style={{ display: !isAddingTask ? 'block' : 'none' }}>
                   <div style={{ fontSize: 'larger', margin: '20px 0 5px 0' }} >Status</div>
                   <select
                     name="status"
