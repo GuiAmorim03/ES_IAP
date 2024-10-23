@@ -25,6 +25,8 @@ export default function Home() {
   const [status, setStatus] = useState("PENDING");
 
   const [sortConfiguration, setSortConfiguration] = useState({ key: 'id', direction: 'ascending' });
+  const [categoryFilter, setCategoryFilter] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
 
   const resetForm = () => {
     setTitle("");
@@ -101,7 +103,7 @@ export default function Home() {
     if (task.deadline) {
       var deadline = task.deadline.split('T');
       setDate(deadline[0]);
-      setTime(deadline[1]);  
+      setTime(deadline[1]);
     }
     var creationDate = task.creationDate.split('T');
     setDateCreation(creationDate[0]);
@@ -181,7 +183,7 @@ export default function Home() {
         .catch((error) => {
           console.error("Error:", error);
         });
-        closeModal();
+      closeModal();
     }
   };
 
@@ -201,6 +203,11 @@ export default function Home() {
     setTasks(sortedTasks);
   }
 
+  const resetFilters = () => {
+    setCategoryFilter("");
+    setStatusFilter("");
+  }
+
   return (
     <>
       <Head>
@@ -212,7 +219,19 @@ export default function Home() {
       <main className={styles.page}>
         <div className={styles.box}>
           <h1 className={styles.title}>To Do</h1>
-          <div style={{ width: '100%', textAlign: 'right' }}>
+          {/* space between */}
+          <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
+            <div>
+              <input value={categoryFilter} onChange={(e) => setCategoryFilter(e.target.value)} type="text" placeholder="Filter by category" style={{height:'30px', fontSize:'larger'}}></input>
+              <label style={{ marginLeft: '20px', fontSize: 'larger' }}>Filter by status:</label>
+              <select value={statusFilter} style={{ marginLeft: '10px', height: '30px', fontSize: 'larger' }} onChange={(e) => setStatusFilter(e.target.value)}>
+                <option value="">All</option>
+                <option value="PENDING">Pending</option>
+                <option value="IN_PROGRESS">In Progress</option>
+                <option value="DONE">Done</option>
+              </select>
+              <button style={{marginLeft: '20px'}} className={styles.addTaskButton} onClick={() => resetFilters()}>Reset Filters</button>
+            </div>
             <button className={styles.addTaskButton} onClick={() => addTask()}>+ Add Task</button>
           </div>
 
@@ -244,6 +263,8 @@ export default function Home() {
             </thead>
             <tbody>
               {tasks.map((task) => (
+                (categoryFilter === "" || task.category.toLowerCase().startsWith(categoryFilter.toLowerCase())) &&
+                (statusFilter === "" || task.status === statusFilter) &&
                 <tr key={task.id}>
                   <td>{task.title}</td>
                   {/* <td>{task.description}</td> */}
@@ -268,8 +289,8 @@ export default function Home() {
                     />
                     {/* {task.status} */}
                   </td>
-                  <td><FontAwesomeIcon icon={faEye} style={{cursor:'pointer'}} className={styles.eyeButton} onClick={() => showTaskDetails(task.id)} /></td>
-                  <td><FontAwesomeIcon icon={faTrash} style={{cursor:'pointer'}} className={styles.trashButton} onClick={() => deleteTask(task.id)} /></td>
+                  <td><FontAwesomeIcon icon={faEye} style={{ cursor: 'pointer' }} className={styles.eyeButton} onClick={() => showTaskDetails(task.id)} /></td>
+                  <td><FontAwesomeIcon icon={faTrash} style={{ cursor: 'pointer' }} className={styles.trashButton} onClick={() => deleteTask(task.id)} /></td>
                 </tr>
               ))}
             </tbody>
@@ -281,7 +302,7 @@ export default function Home() {
             <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
               <h2 style={{ marginBottom: '20px' }}>
                 {isAddingTask ? "Add New Task" : "Task Details"}
-                <FontAwesomeIcon icon={faPencil} style={{cursor:'pointer', height:'1rem', marginLeft:'1rem', display: (isAddingTask || isEditingTask) ? 'none' : '' }} onClick={() => setIsEditingTask(true)} />
+                <FontAwesomeIcon icon={faPencil} style={{ cursor: 'pointer', height: '1rem', marginLeft: '1rem', display: (isAddingTask || isEditingTask) ? 'none' : '' }} onClick={() => setIsEditingTask(true)} />
               </h2>
               <form onSubmit={handleSubmit}>
                 <div style={{ fontSize: 'larger', margin: '20px 0 5px 0' }} >Title</div>
@@ -364,7 +385,7 @@ export default function Home() {
                     value={status}
                     onChange={(e) => setStatus(e.target.value)}
                     disabled={!isAddingTask && !isEditingTask}
-                    >
+                  >
                     <option value="PENDING">Pending</option>
                     <option value="IN_PROGRESS">In Progress</option>
                     <option value="DONE">Done</option>
@@ -373,7 +394,7 @@ export default function Home() {
                 <br />
                 <div style={{ marginTop: '25px', display: 'flex', justifyContent: 'space-between' }}>
                   <button className={styles.addTaskButton} style={{ display: (isAddingTask || isEditingTask) ? 'block' : 'none' }} type="submit">
-                    {isAddingTask ? "Add" : "Save"} 
+                    {isAddingTask ? "Add" : "Save"}
                   </button>
                   <button className={styles.addTaskButton} type="button" onClick={closeModal}>Close</button>
                 </div>
