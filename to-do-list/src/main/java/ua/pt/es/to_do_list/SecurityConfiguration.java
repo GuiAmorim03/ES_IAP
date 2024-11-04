@@ -25,7 +25,9 @@ public class SecurityConfiguration {
                 .requestMatchers("/public/**").permitAll()
                 .anyRequest().authenticated()
             )
-            .httpBasic(httpBasic -> httpBasic.disable());  // Disable basic authentication
+            .oauth2Login(oauth2 -> oauth2.defaultSuccessUrl("/"))
+            .logout(logout -> logout.logoutSuccessUrl("/"));
+            // .httpBasic(httpBasic -> httpBasic.disable());  // Disable basic authentication
 
         return http.build();
     }
