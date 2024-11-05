@@ -24,19 +24,15 @@ public class Person {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false)
-    private String password;
-
     @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Task> tasks;
 
     public Person() {
     }
 
-    public Person(String name, String email, String password) {
+    public Person(String name, String email) {
         this.name = name;
         this.email = email;
-        this.password = password;
     }
 
     public Long getId() {
@@ -49,10 +45,6 @@ public class Person {
 
     public String getEmail() {
         return email;
-    }
-
-    public String getPassword() {
-        return password;
     }
 
     @Override

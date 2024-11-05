@@ -3,6 +3,7 @@ package ua.pt.es.to_do_list.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import ua.pt.es.to_do_list.dto.PersonToCreate;
 import ua.pt.es.to_do_list.models.Person;
 import ua.pt.es.to_do_list.repositories.PersonRepository;
 
@@ -34,6 +35,19 @@ public class PersonService {
 
     public Person getPersonById(Long id) {
         return personRepository.findById(id);
+    }
+
+    public Person addPerson(PersonToCreate personToCreate) {
+        System.out.println("PersonService.addPerson");
+        System.out.println(personToCreate);
+        System.out.println(personToCreate.getName());
+        System.out.println(personToCreate.getEmail());
+        Person existingPerson = personRepository.findByEmail(personToCreate.getEmail());
+        if (existingPerson != null) {
+            return existingPerson;
+        }
+        Person newPerson = new Person(personToCreate.getName(), personToCreate.getEmail());
+        return personRepository.save(newPerson);
     }
 
 }

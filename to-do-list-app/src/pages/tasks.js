@@ -1,15 +1,14 @@
 import Head from "next/head";
-import Image from "next/image";
 import styles from "@/styles/Home.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowRight, faCircle, faCheck, faClock, faSpinner, faPencil, faEye, faTrash, faSignOut, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
+import { faCircle, faCheck, faClock, faSpinner, faPencil, faEye, faTrash, faSignOut, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 import { apiURL } from "@/components/apiURL";
 import { useEffect, useState } from "react";
 
 
 export default function Home() {
 
-  const userID = 1;
+  const [userID, setUserID] = useState(null);
   const [tasks, setTasks] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -42,17 +41,86 @@ export default function Home() {
   const [isAddingTask, setIsAddingTask] = useState(false);
 
   useEffect(() => {
-    const fetchTasks = async () => {
-      try {
-        const response = await fetch(`${apiURL}/task/${userID}`);
-        const data = await response.json();
-        setTasks(data);
-      } catch (error) {
-        console.error("Error fetching tasks: ", error);
+
+    const fetchUser = async () => {
+      const client_id = "2ubdjjncapfvfqhughoocn2ino";
+      const client_secret = "1luuq1gtcdm69smbib3marnefo8i237lqp6tsg99gqmpm6vj7pqj";
+      const redirect_uri = window.location.origin + window.location.pathname;
+      const code = new URLSearchParams(window.location.search).get("code");
+
+      const bodyData = {
+        grant_type: "authorization_code",
+        client_id: client_id,
+        client_secret: client_secret,
+        redirect_uri: redirect_uri,
+        code: code
+      };
+
+      let idToken = sessionStorage.getItem("id_token");
+      if (idToken === null) {
+        try {
+          const response = await fetch("https://to-do-list-107162.auth.us-east-1.amazoncognito.com/oauth2/token", {
+            method: "POST",
+            headers: {
+              "Authorization": "Basic " + btoa(`${client_id}:${client_secret}`),
+              "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: new URLSearchParams(bodyData).toString()
+          });
+          if (response.ok) {
+            const tokenData = await response.json();
+            idToken = tokenData.id_token;
+            sessionStorage.setItem("id_token", idToken);
+          }
+        }
+        catch (error) {
+          console.error("Error fetching user: ", error);
+        }
+
       }
-    }
-    fetchTasks();
+      const jwt = require('jsonwebtoken');
+      const decodedToken = jwt.decode(idToken);
+
+      if (decodedToken) {
+        try {
+          const person = new FormData();
+          person.append('name', decodedToken.name);
+          person.append('email', decodedToken.email);
+
+          const response = await fetch(`${apiURL}/person`, {
+            method: 'POST',
+            body: person,
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            setUserID(data.id);
+          } else {
+            console.error('Failed to add person:', response.statusText);
+          }
+        } catch (error) {
+          console.error('Error:', error);
+        }
+      }
+    };
+    fetchUser();
   }, []);
+
+  useEffect(() => {
+    const fetchTasks = async () => {
+      if (userID !== null) {
+        try {
+          const response = await fetch(`${apiURL}/task/${userID}`);
+          const data = await response.json();
+          setTasks(data);
+        } catch (error) {
+          console.error("Error fetching tasks: ", error);
+        }
+      }
+    };
+
+    fetchTasks();
+  }, [userID]);
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -93,7 +161,6 @@ export default function Home() {
     setIsEditingTask(false);
     setIsAddingTask(false);
     var task = tasks.find(task => task.id === idTask);
-    console.log(task);
     setId(task.id);
     setTitle(task.title);
     setDescription(task.description);
@@ -209,8 +276,8 @@ export default function Home() {
   }
 
   const handleLogout = () => {
+    sessionStorage.removeItem("id_token");
     window.location.href = "https://to-do-list-107162.auth.us-east-1.amazoncognito.com/logout?client_id=2ubdjjncapfvfqhughoocn2ino&logout_uri=http://localhost:3000";
-    // window.location.href = "https://to-do-list-107162.auth.us-east-1.amazoncognito.com/logout?response_type=code&client_id=2ubdjjncapfvfqhughoocn2ino&scope=openid&redirect_uri=http://localhost:3000";
   }
 
 
@@ -224,9 +291,9 @@ export default function Home() {
       </Head>
       <main className={styles.page}>
         <div className={styles.box}>
-          <div style={{ width: '100%', display: 'flex', justifyContent:'end' }}>
+          <div style={{ width: '100%', display: 'flex', justifyContent: 'end' }}>
             <h2>User</h2>
-            <FontAwesomeIcon icon={faSignOutAlt} onClick={() => handleLogout()} style={{ height: '2rem', marginLeft:'1rem', cursor:'pointer'}} ></FontAwesomeIcon>
+            <FontAwesomeIcon icon={faSignOutAlt} onClick={() => handleLogout()} style={{ height: '2rem', marginLeft: '1rem', cursor: 'pointer' }} ></FontAwesomeIcon>
           </div>
 
           <h1 className={styles.title}>To Do</h1>
