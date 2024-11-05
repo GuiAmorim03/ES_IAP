@@ -25,7 +25,7 @@ public class InsertData implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        personRepository.save(new Person("Guilherme", "guilhermeamorim@ua.pt", "guilherme"));
+        personRepository.save(new Person("Admin", "admin@admin.pt"));
         
         Task task1 = new Task("Setup Frontend", "Create the frontend using React", LocalDateTime.of(2024, 10, 18, 23, 59), "Frontend", Priority.MEDIUM, personRepository.findById(1L));
         Task task2 = new Task("Set Up Backend", "Create the backend using Spring Boot", LocalDateTime.of(2024, 10, 19, 23, 59), "Backend", Priority.HIGH, personRepository.findById(1L));
