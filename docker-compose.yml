@@ -14,5 +14,31 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  api:
+    build: 
+      context: ./to-do-list
+      dockerfile: Dockerfile
+    container_name: todoapi
+    restart: always
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/todo
+      SPRING_DATASOURCE_USERNAME: todouser
+      SPRING_DATASOURCE_PASSWORD: todo123
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+
+  web:
+    build: 
+      context: ./to-do-list-app
+      dockerfile: Dockerfile
+    container_name: todoweb
+    restart: always
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+
 volumes:
   postgres_data:
