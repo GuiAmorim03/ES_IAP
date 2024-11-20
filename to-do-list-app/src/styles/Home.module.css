@@ -84,6 +84,14 @@
   background-color: #ffeeff;
 }
 
+.taskTable th {
+  cursor: pointer;
+}
+
+.taskTable th:hover {
+  text-shadow: 1px 1px 10px white;
+}
+
 @media (prefers-color-scheme: dark) {
   .taskTable tr {
     background-color: #121212;
@@ -118,10 +126,8 @@
 
   .taskTable tr {
     margin-bottom: 1rem;
-    border: 1px solid #ddd;
     border-radius: 8px;
     padding: 0.5rem;
-    background-color: #ffffff;
   }
 
   .taskTable td {

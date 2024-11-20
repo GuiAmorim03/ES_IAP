@@ -1,0 +1,57 @@
+/* Login.module.css */
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+.title {
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+@media (prefers-color-scheme: dark) {
+    .title {
+        color: #fff;
+    }
+}
+
+.description {
+    font-size: 1.2rem;
+    color: #666;
+    margin-bottom: 30px;
+}
+
+@media (prefers-color-scheme: dark) {
+    .description {
+        color: #aaa;
+    }
+}
+
+.loginButton {
+    padding: 1.5rem 3rem;
+    font-size: 1.5rem;
+    color: white;
+    background-color: purple;
+    border: 2px solid purple;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.loginButton:hover {
+    background-color: transparent;
+    transition: all 0.3s;
+}
+
+@media (prefers-color-scheme: light) {
+    .loginButton:hover {
+        color: purple;
+    }
+}
