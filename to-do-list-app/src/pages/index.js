@@ -1,9 +1,10 @@
 import React from "react";
 import styles from "@/styles/Login.module.css";
+import { apiURL } from "@/components/apiURL";
 
 export default function Login() {
   const handleLogin = () => {
-    window.location.href = "http://localhost:8080/oauth2/authorization/cognito";
+    window.location.href = `${apiURL}/oauth2/authorization/cognito`;
   };
 
   return (
