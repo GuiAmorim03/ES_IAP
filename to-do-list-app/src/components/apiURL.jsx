@@ -1,2 +1,1 @@
-// export const apiURL = "http://localhost:8080";
-export const apiURL = "http://todo-api-env.eba-ricxjmf8.us-east-1.elasticbeanstalk.com";
+export const apiURL = "https://k88venc3d8.execute-api.us-east-1.amazonaws.com";
