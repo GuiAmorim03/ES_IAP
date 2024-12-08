@@ -39,3 +39,20 @@ mvn spring-boot:run # to start the backend server
 
 #### Documentation
 To access the API documentation, go to http://localhost:8080/swagger-ui.html
+
+## Run the application
+
+It's possible to run the application as a whole, due to the docker-compose file.
+
+On ./ run:
+
+```bash
+docker-compose up -d
+```
+
+To stop the application:
+
+```bash
+docker-compose down -v
+```
+

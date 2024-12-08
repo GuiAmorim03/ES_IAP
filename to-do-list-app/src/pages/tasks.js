@@ -3,6 +3,7 @@ import styles from "@/styles/Home.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircle, faCheck, faClock, faSpinner, faPencil, faEye, faTrash, faSignOut, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 import { apiURL } from "@/components/apiURL";
+import { uiURL } from "@/components/uiURL";
 import { useEffect, useState } from "react";
 
 
@@ -277,7 +278,7 @@ export default function Home() {
 
   const handleLogout = () => {
     sessionStorage.removeItem("id_token");
-    window.location.href = "https://to-do-list-107162.auth.us-east-1.amazoncognito.com/logout?client_id=2ubdjjncapfvfqhughoocn2ino&logout_uri=http://localhost:3000";
+    window.location.href = "https://to-do-list-107162.auth.us-east-1.amazoncognito.com/logout?client_id=2ubdjjncapfvfqhughoocn2ino&logout_uri=" + uiURL;
   }
 
 
