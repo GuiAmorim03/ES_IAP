@@ -44,8 +44,8 @@ export default function Home() {
   useEffect(() => {
 
     const fetchUser = async () => {
-      const client_id = "2ubdjjncapfvfqhughoocn2ino";
-      const client_secret = "1luuq1gtcdm69smbib3marnefo8i237lqp6tsg99gqmpm6vj7pqj";
+      const client_id = "12abehthd2qrgka0d62d9lud0g";
+      const client_secret = "18h16t0duq2l5n9hjfmh3nddv6dnil9j8hs1s8rhnfhrjjoq8lfs";
       const redirect_uri = window.location.origin + window.location.pathname;
       const code = new URLSearchParams(window.location.search).get("code");
 
@@ -60,7 +60,7 @@ export default function Home() {
       let idToken = sessionStorage.getItem("id_token");
       if (idToken === null) {
         try {
-          const response = await fetch("https://to-do-list-107162.auth.us-east-1.amazoncognito.com/oauth2/token", {
+          const response = await fetch("https://eu-west-1cw7dzwvfp.auth.eu-west-1.amazoncognito.com/oauth2/token", {
             method: "POST",
             headers: {
               "Authorization": "Basic " + btoa(`${client_id}:${client_secret}`),
@@ -278,7 +278,7 @@ export default function Home() {
 
   const handleLogout = () => {
     sessionStorage.removeItem("id_token");
-    window.location.href = "https://to-do-list-107162.auth.us-east-1.amazoncognito.com/logout?client_id=2ubdjjncapfvfqhughoocn2ino&logout_uri=" + uiURL;
+    window.location.href = "https://eu-west-1cw7dzwvfp.auth.eu-west-1.amazoncognito.com/logout?client_id=12abehthd2qrgka0d62d9lud0g&logout_uri=" + uiURL;
   }
 
 
